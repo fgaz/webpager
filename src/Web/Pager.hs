@@ -81,7 +81,6 @@ page meta ls' n =
            $ drop (perPage meta * n) ls'
 
 --TODO manage splitting with user given options
---TODO ESCAPE
 toTableRow :: Text -> Html ()
 toTableRow = tr_ . td_  . toHtml
 
