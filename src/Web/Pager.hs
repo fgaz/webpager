@@ -19,25 +19,24 @@ import Data.Monoid (mempty)
 import Control.Monad (when)
 import Data.Maybe (fromMaybe, catMaybes)
 
---TODO rename to Serrings/Config?
-data Metadata = Metadata { title :: Text
-                         , extraMetas :: Html () 
-                         , perPage :: Int }
+data Config = Config { title :: Text
+                     , extraMetas :: Html () 
+                     , perPage :: Int }
 
-instance Default Metadata where
-  def = Metadata { title = "Pager"
-                 , extraMetas = mempty
-                 , perPage = 20 }
+instance Default Config where
+  def = Config { title = "Pager"
+               , extraMetas = mempty
+               , perPage = 20 }
 
-pagerMiddleware :: FilePath -> Metadata -> Middleware
-pagerMiddleware path meta =
-  ifRequest isPagerRequest $ const $ pagerApp path meta
+pagerMiddleware :: FilePath -> Config -> Middleware
+pagerMiddleware path conf =
+  ifRequest isPagerRequest $ const $ pagerApp path conf
   where isPagerRequest = const True --TODO
 
-pagerApp :: FilePath -> Metadata -> Application
-pagerApp path meta req respond = do
+pagerApp :: FilePath -> Config -> Application
+pagerApp path conf req respond = do
   let n = requestToPageNumber req
-  responseBody <- handler path meta n
+  responseBody <- handler path conf n
   respond $ responseLBS status200 [] responseBody
 
 requestToPageNumber :: Request -> Maybe Int
@@ -63,22 +62,22 @@ safeHead :: [a] -> Maybe a
 safeHead [] = Nothing
 safeHead (x:_) = Just x
 
-handler :: FilePath -> Metadata -> Maybe Int -> IO ByteString
-handler path meta n' = do
+handler :: FilePath -> Config -> Maybe Int -> IO ByteString
+handler path conf n' = do
   contents <- TIO.readFile path
   let ls = T.lines contents
   let nlines = length ls
-  let lastPage = nlines `div` perPage meta
+  let lastPage = nlines `div` perPage conf
   let n = fromMaybe lastPage n'
-  return $ renderBS $ wrapHtml meta n lastPage $ page meta ls n
+  return $ renderBS $ wrapHtml conf n lastPage $ page conf ls n
 
-page :: Metadata -> [Text] -> Int -> Html ()
-page meta ls' n =
+page :: Config -> [Text] -> Int -> Html ()
+page conf ls' n =
   table_ $ do
     th_ $ td_  "This is the table head. TODO"
     mapM_ toTableRow ls
-  where ls = take (perPage meta)
-           $ drop (perPage meta * n) ls'
+  where ls = take (perPage conf)
+           $ drop (perPage conf * n) ls'
 
 --TODO manage splitting with user given options
 toTableRow :: Text -> Html ()
@@ -94,16 +93,16 @@ pageSelector n lastPage =
       span_ [class_ "nextPage"] $ a_ [href_ $ ("?p=" <>) $ T.pack $ show (n+1)] "Next"
       span_ [class_ "lastPage"] $ a_ [href_ $ ("?p=" <>) $ T.pack $ show lastPage] "Last"
 
-wrapHtml :: Metadata -> Int -> Int -> Html () -> Html ()
-wrapHtml meta n lastPage inner = do
+wrapHtml :: Config -> Int -> Int -> Html () -> Html ()
+wrapHtml conf n lastPage inner = do
   doctype_
   html_ $ do
     head_ $ do
       meta_ [charset_ "utf-8"]
-      title_ $ toHtml $ title meta
+      title_ $ toHtml $ title conf
       --metas
       --assets
-      extraMetas meta
+      extraMetas conf
     body_ $ do
       header
       h2_ ("Page " <> toHtml (T.pack $ show n))
