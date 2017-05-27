@@ -14,10 +14,8 @@ import qualified Data.Text.IO as TIO
 import qualified Data.Text.Read as TR
 import qualified Data.Text.Encoding as TE
 import Data.ByteString.Lazy (ByteString)
-import qualified Data.ByteString.Lazy as LBS
 import qualified Data.ByteString as SBS
 import Network.Wai
-import Network.HTTP.Types.URI (Query)
 import Network.HTTP.Types.Status (status200)
 import Data.Semigroup ((<>))
 import Data.Monoid (mempty)
