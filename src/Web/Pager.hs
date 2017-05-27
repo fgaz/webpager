@@ -24,12 +24,16 @@ import Data.Maybe (fromMaybe, catMaybes)
 
 data Config = Config { title :: Text
                      , extraMetas :: Html () 
-                     , perPage :: Int }
+                     , perPage :: Int
+                     , tableHead :: [Text]
+                     , formatLine :: Text -> [Html ()]}
 
 instance Default Config where
   def = Config { title = "Pager"
                , extraMetas = mempty
-               , perPage = 20 }
+               , perPage = 20
+               , tableHead = ["Lines"]
+               , formatLine = pure . toHtml }
 
 pagerMiddleware :: FilePath -> Config -> Middleware
 pagerMiddleware path conf =
@@ -77,14 +81,14 @@ handler path conf n' = do
 page :: Config -> [Text] -> Int -> Html ()
 page conf ls' n =
   table_ $ do
-    th_ $ td_  "This is the table head. TODO"
-    mapM_ toTableRow ls
+    th_ $
+      mapM_ (td_ . toHtml) $ tableHead conf
+    mapM_ (toTableRow $ formatLine conf) ls
   where ls = take (perPage conf)
            $ drop (perPage conf * n) ls'
 
---TODO manage splitting with user given options
-toTableRow :: Text -> Html ()
-toTableRow = tr_ . td_  . toHtml
+toTableRow :: (Text -> [Html ()]) -> Text -> Html ()
+toTableRow format = tr_ . mapM_ td_  . format
 
 pageSelector :: Int -> Int -> Html ()
 pageSelector n lastPage =
