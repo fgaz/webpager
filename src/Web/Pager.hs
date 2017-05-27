@@ -1,5 +1,10 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Web.Pager where
+
+module Web.Pager
+( Config(..)
+, pagerMiddleware
+, pagerApp
+) where
 
 import Data.Default.Class
 import Lucid
