@@ -1,7 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Web.Pager.Formatters
-( colorHash
+( Formatter
+, colorHash
 , irc
 , oneWordPerCell
 ) where
