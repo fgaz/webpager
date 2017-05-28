@@ -35,10 +35,13 @@ instance Default Config where
                , tableHead = ["Lines"]
                , formatLine = pure . toHtml }
 
-pagerMiddleware :: FilePath -> Config -> Middleware
-pagerMiddleware path conf =
+pagerMiddleware :: (Request -> Bool) -> FilePath -> Config -> Middleware
+pagerMiddleware isPagerRequest path conf =
   ifRequest isPagerRequest $ const $ pagerApp path conf
-  where isPagerRequest = const True --TODO
+
+pagerMiddlewareOnPath :: Text {-TODO or whatever string-like is fit-} -> FilePath -> Config -> Middleware
+pagerMiddlewareOnPath = pagerMiddleware . mkCondition
+  where mkCondition = undefined --TODO
 
 pagerApp :: FilePath -> Config -> Application
 pagerApp path conf req respond = do
