@@ -114,7 +114,7 @@ wrapHtml conf n lastPage inner = do
       --assets
       extraMetas conf
     body_ $ do
-      header
+      header title
       h2_ ("Page " <> toHtml (T.pack $ show n))
       div_ [class_ "wrap"] $ main_ [role_ "main"] $ do
         pageSelector n lastPage
@@ -123,9 +123,9 @@ wrapHtml conf n lastPage inner = do
       hr_ []
       footer
 
-header :: Html ()
+header :: Text -> Html ()
 header = header_ [role_ "banner"] $
-  h1_ "Pager"
+  h1_ $ toHtml title
 
 footer :: Html ()
 footer = footer_ [role_ "contentinfo"] $
