@@ -124,8 +124,8 @@ wrapHtml conf n lastPage inner = do
       footer
 
 header :: Text -> Html ()
-header = header_ [role_ "banner"] $
-  h1_ $ toHtml title
+header t = header_ [role_ "banner"] $
+  h1_ $ toHtml t
 
 footer :: Html ()
 footer = footer_ [role_ "contentinfo"] $
