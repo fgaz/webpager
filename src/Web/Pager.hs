@@ -84,8 +84,8 @@ handler path conf n' = do
 page :: Config -> [Text] -> Int -> Html ()
 page conf ls' n =
   table_ $ do
-    th_ $
-      mapM_ (td_ . toHtml) $ tableHead conf
+    tr_ $
+      mapM_ (th_ . toHtml) $ tableHead conf
     mapM_ (toTableRow $ formatLine conf) ls
   where ls = take (perPage conf)
            $ drop (perPage conf * n) ls'
