@@ -114,7 +114,7 @@ wrapHtml conf n lastPage inner = do
       --assets
       extraMetas conf
     body_ $ do
-      header title
+      header $ title conf
       h2_ ("Page " <> toHtml (T.pack $ show n))
       div_ [class_ "wrap"] $ main_ [role_ "main"] $ do
         pageSelector n lastPage
