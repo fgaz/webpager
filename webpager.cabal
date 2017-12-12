@@ -20,7 +20,7 @@ library
   exposed-modules:     Web.Pager, Web.Pager.Formatters
   -- other-modules:       
   -- other-extensions:    
-  build-depends:       base >=4.7 && <4.11
+  build-depends:       base >=4.8 && <4.11
                      , wai
                      , http-types
                      , lucid
@@ -37,7 +37,7 @@ test-suite serveSelf
   type:            exitcode-stdio-1.0
   main-is:         ServeSelf.hs
   hs-source-dirs:  tests
-  build-depends:       base >=4.7 && <4.11
+  build-depends:       base >=4.8 && <4.11
                      , webpager
                      , warp
                      , data-default-class
