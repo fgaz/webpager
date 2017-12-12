@@ -2,6 +2,8 @@
 
 A generic pager for the web.
 
+[![Build Status](https://travis-ci.org/fgaz/webpager.svg?branch=master)](https://travis-ci.org/fgaz/webpager)
+
 This library provides both a `wai` `Middleware` and an `Application`.
 
 You can use it by simply serving it with `warp` with only the path of
