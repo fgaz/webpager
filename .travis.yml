@@ -25,12 +25,10 @@ install:
  - cabal --version
  - echo "$(ghc --version) [$(ghc --print-project-git-commit-id 2> /dev/null || echo '?')]"
  - travis_retry cabal update
- - cabal install --only-dependencies --enable-tests
 
 script:
- - cabal configure --enable-tests --enable-coverage -v2
- - cabal build
+ - cabal new-build
  # cabal test --show-details=always
  - cabal sdist
- - cabal haddock
+ - cabal new-haddock
 
