@@ -14,13 +14,13 @@ import Data.Semigroup ((<>))
 import Numeric (showHex)
 import Data.Hashable (hash)
 
--- ^ A formatter turns a line into a list of HTML fragments.
+-- | A formatter turns a line into a list of HTML fragments.
 -- Each fragment will be wrapped in a <td> (you don't need
 -- to do it (and in fact you shouldn't)) and put into a <tr>
 -- together with the rest of the line.
 type Formatter = Text -> [Html ()]
 
--- ^ Utility function, used internally in 'irc'.
+-- | Utility function, used internally in 'irc'.
 -- Creates a color attribute by hashing the contents of its
 -- argument.
 -- Useful for usernames and such.
@@ -30,7 +30,7 @@ colorHash t = style_ ("color:#" <> T.take 6 (hash' t) <>";")
 hash' :: Text -> Text
 hash' = T.pack . flip showHex "" . abs . hash
 
--- ^ Parse irc logs, in the format outputted by the ii client.
+-- | Parse irc logs, in the format outputted by the ii client.
 --
 -- > "date time <user> message (maybe with spaces)
 --
@@ -48,7 +48,7 @@ irc txt = [dateHtml, hourHtml, nameHtml, messageHtml]
         nameHtml = span_ [nameColor] $ toHtml name
         messageHtml = toHtml message
 
--- ^ Separates the words in the line, one cell each.
+-- | Separates the words in the line, one cell each.
 oneWordPerCell :: Formatter
 oneWordPerCell txt = toHtml <$> T.words txt
 
