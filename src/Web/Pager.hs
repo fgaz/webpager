@@ -17,6 +17,7 @@ import Data.ByteString.Lazy (ByteString)
 import qualified Data.ByteString as SBS
 import Network.Wai
 import Network.HTTP.Types.Status (status200)
+import Network.HTTP.Types.Header (hContentType)
 import Data.Semigroup ((<>))
 import Data.Monoid (mempty)
 import Control.Monad (when)
@@ -47,7 +48,7 @@ pagerApp :: FilePath -> Config -> Application
 pagerApp path conf req respond = do
   let n = requestToPageNumber req
   responseBody <- handler path conf n
-  respond $ responseLBS status200 [] responseBody
+  respond $ responseLBS status200 [(hContentType, "text/html")] responseBody
 
 requestToPageNumber :: Request -> Maybe Int
 requestToPageNumber = (readMaybeBSDecimal=<<)
